@@ -1,14 +1,16 @@
-import { useToast } from "../hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import EmptyState from "../components/empty-state";
 import TaskCard from "../components/task-card";
+import { useToast } from "../hooks/use-toast";
 
 interface CompletedProps {
   openTaskModal?: (taskId?: number) => void;
 }
 
 export default function Completed({ openTaskModal }: CompletedProps) {
+  const { t } = useTranslation("completed");
   const { toast } = useToast();
 
   const {
@@ -22,7 +24,7 @@ export default function Completed({ openTaskModal }: CompletedProps) {
   useEffect(() => {
     if (error) {
       toast({
-        title: "Error loading tasks",
+        title: t("task_loading_error.title"),
         description:
           error instanceof Error ? error.message : "An unknown error occurred",
         variant: "destructive",
@@ -42,10 +44,12 @@ export default function Completed({ openTaskModal }: CompletedProps) {
   return (
     <>
       <div className="mb-6">
-        <h2 className="text-2xl font-bold">Completed Tasks</h2>
+        <h2 className="text-2xl font-bold">{t("completed_tasks")}</h2>
         <p className="text-gray-500 mt-1">
           {completedTasks.length}{" "}
-          {completedTasks.length === 1 ? "task" : "tasks"} completed
+          {completedTasks.length === 1
+            ? t("completed_singular")
+            : t("completed_plural")}
         </p>
       </div>
 
@@ -62,9 +66,9 @@ export default function Completed({ openTaskModal }: CompletedProps) {
         </div>
       ) : completedTasks.length === 0 ? (
         <EmptyState
-          title="No completed tasks"
-          description="You haven't completed any tasks yet. Complete a task to see it here."
-          actionLabel="Add Task"
+          title={t("empty_state.title")}
+          description={t("empty_state.description")}
+          actionLabel={t("empty_state.action_label")}
           onAction={() => openTaskModal && openTaskModal()}
         />
       ) : (

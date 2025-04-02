@@ -7,6 +7,7 @@ import {
   isWithinInterval,
 } from "date-fns";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import EmptyState from "../components/empty-state";
 import TaskCard from "../components/task-card";
 import { useToast } from "../hooks/use-toast";
@@ -17,6 +18,7 @@ interface UpcomingProps {
 
 export default function Upcoming({ openTaskModal }: UpcomingProps) {
   const { toast } = useToast();
+  const { t } = useTranslation("upcoming");
 
   const {
     data: tasks = [],
@@ -91,10 +93,8 @@ export default function Upcoming({ openTaskModal }: UpcomingProps) {
   return (
     <>
       <div className="mb-6">
-        <h2 className="text-2xl font-bold">Upcoming Tasks</h2>
-        <p className="text-gray-500 mt-1">
-          View and manage your upcoming tasks
-        </p>
+        <h2 className="text-2xl font-bold">{t("upcoming")}</h2>
+        <p className="text-gray-500 mt-1">{t("description")}</p>
       </div>
 
       {isLoading ? (
@@ -121,10 +121,10 @@ export default function Upcoming({ openTaskModal }: UpcomingProps) {
             <div className="mb-8">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold flex items-center text-primary">
-                  Today
+                  {t("today")}
                 </h3>
                 <span className="text-sm text-gray-500">
-                  {filteredTasks.today.length} tasks
+                  {filteredTasks.today.length} {t("tasks")}
                 </span>
               </div>
 
@@ -140,10 +140,10 @@ export default function Upcoming({ openTaskModal }: UpcomingProps) {
             <div className="mb-8">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold flex items-center">
-                  Tomorrow
+                  {t("tomorrow")}
                 </h3>
                 <span className="text-sm text-gray-500">
-                  {filteredTasks.tomorrow.length} tasks
+                  {filteredTasks.tomorrow.length} {t("tasks")}
                 </span>
               </div>
 
@@ -159,10 +159,10 @@ export default function Upcoming({ openTaskModal }: UpcomingProps) {
             <div className="mb-8">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold flex items-center">
-                  This Week
+                  {t("this_week")}
                 </h3>
                 <span className="text-sm text-gray-500">
-                  {filteredTasks.thisWeek.length} tasks
+                  {filteredTasks.thisWeek.length} {t("tasks")}
                 </span>
               </div>
 
@@ -181,7 +181,7 @@ export default function Upcoming({ openTaskModal }: UpcomingProps) {
                   Later
                 </h3>
                 <span className="text-sm text-gray-500">
-                  {filteredTasks.later.length} tasks
+                  {filteredTasks.later.length} {t("tasks")}
                 </span>
               </div>
 

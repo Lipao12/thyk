@@ -1,8 +1,10 @@
-import { Bell, Menu, Plus, Search } from "lucide-react";
+import { Bell, Menu, Moon, Plus, SunDim } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useTheme } from "../context/theme-provider";
 import { ThykLogo } from "./thyk-logo";
 import { Button } from "./ui/button";
+import { ButtonLocale } from "./ui/button-locale";
 import { Label } from "./ui/label";
 import { Switch } from "./ui/switch";
 
@@ -12,10 +14,15 @@ interface HeaderProps {
 }
 
 export default function Header({ toggleSidebar, openTaskModal }: HeaderProps) {
+  const { t, i18n } = useTranslation("header");
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  // Avoid hydration mismatch by mounting after first render
+  const toggleLanguage = () => {
+    const newLang = i18n.language === "en" ? "pt" : "en";
+    i18n.changeLanguage(newLang);
+  };
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -25,7 +32,7 @@ export default function Header({ toggleSidebar, openTaskModal }: HeaderProps) {
   }
 
   return (
-    <header className="bg-white dark:bg-gray-800 shadow-sm px-4 py-3 sticky top-0 z-50">
+    <header className="bg-white dark:bg-gray-800 drop-shadow-[0_10px_5px_rgba(100,100,100,0.1)] px-4 py-3 sticky top-0 z-50 ">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <Button
@@ -47,18 +54,8 @@ export default function Header({ toggleSidebar, openTaskModal }: HeaderProps) {
             className="bg-thyk-gradient text-white hover:opacity-90 hidden sm:flex"
             size="sm"
           >
-            <Plus className="mr-1 h-4 w-4" /> New Task
+            <Plus className="mr-1 h-4 w-4" /> {t("new_task")}
           </Button>
-
-          <div className="relative">
-            <Button
-              className="bg-slate-100 dark:bg-navy/70 hover:bg-slate-200 dark:hover:bg-navy p-2 rounded-full transition"
-              variant="ghost"
-              size="icon"
-            >
-              <Search className="h-5 w-5" />
-            </Button>
-          </div>
 
           <div className="relative">
             <Button
@@ -68,6 +65,10 @@ export default function Header({ toggleSidebar, openTaskModal }: HeaderProps) {
             >
               <Bell className="h-5 w-5" />
             </Button>
+          </div>
+
+          <div className="relative">
+            <ButtonLocale toggleLanguage={toggleLanguage} />
           </div>
 
           <div className="flex items-center ml-1">
@@ -83,7 +84,7 @@ export default function Header({ toggleSidebar, openTaskModal }: HeaderProps) {
                 htmlFor="darkModeToggle"
                 className="hidden sm:inline text-sm"
               >
-                {theme === "dark" ? "Light Mode" : "Dark Mode"}
+                {theme === "dark" ? <SunDim /> : <Moon />}
               </Label>
             </div>
           </div>

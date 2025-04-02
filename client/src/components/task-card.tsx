@@ -1,5 +1,6 @@
 import { Clock, Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useToast } from "../hooks/use-toast";
 import { apiRequest, queryClient } from "../lib/queryClient";
 import { formatDate, formatTime } from "../lib/utils";
@@ -13,6 +14,7 @@ interface TaskCardProps {
 }
 
 export default function TaskCard({ task, onEdit }: TaskCardProps) {
+  const { t } = useTranslation("task_card");
   const [isDeleting, setIsDeleting] = useState(false);
   const [isCompleting, setIsCompleting] = useState(false);
   const { toast } = useToast();
@@ -28,12 +30,12 @@ export default function TaskCard({ task, onEdit }: TaskCardProps) {
       queryClient.invalidateQueries({ queryKey: ["/api/tasks/timeframe"] });
 
       toast({
-        title: "Task deleted",
-        description: "Task has been deleted successfully",
+        title: t("task_deleted.title"),
+        description: t("task_deleted.description"),
       });
     } catch (error) {
       toast({
-        title: "Failed to delete task",
+        title: t("task_deleted_faild.title"),
         description:
           error instanceof Error ? error.message : "Unknown error occurred",
         variant: "destructive",
@@ -56,14 +58,19 @@ export default function TaskCard({ task, onEdit }: TaskCardProps) {
       queryClient.invalidateQueries({ queryKey: ["/api/tasks/timeframe"] });
 
       toast({
-        title: task.completed ? "Task marked incomplete" : "Task completed",
-        description: `Task "${task.title}" has been ${
-          task.completed ? "marked as incomplete" : "completed"
-        } successfully`,
+        title: task.completed
+          ? t("task_complete.task_marked_incomplete")
+          : t("task_complete.task_completed"),
+        description: t("task_complete.task_status_message", {
+          title: task.title,
+          status: task.completed
+            ? t("task_complete.unconplete")
+            : t("task_complete.complete"),
+        }),
       });
     } catch (error) {
       toast({
-        title: "Failed to update task",
+        title: t("tasktask_complete_failed_complete.title"),
         description:
           error instanceof Error ? error.message : "Unknown error occurred",
         variant: "destructive",
@@ -153,19 +160,19 @@ export default function TaskCard({ task, onEdit }: TaskCardProps) {
       case "high":
         return (
           <div className="px-2 py-1 bg-accent/10 dark:bg-accent/20 text-accent dark:text-accent text-xs rounded-md font-medium">
-            High
+            {t("high")}
           </div>
         );
       case "medium":
         return (
           <div className="px-2 py-1 bg-warning/10 dark:bg-warning/20 text-warning dark:text-warning text-xs rounded-md font-medium">
-            Medium
+            {t("medium")}
           </div>
         );
       case "low":
         return (
           <div className="px-2 py-1 bg-secondary/10 dark:bg-secondary/20 text-secondary dark:text-secondary text-xs rounded-md font-medium">
-            Low
+            {t("low")}
           </div>
         );
       default:

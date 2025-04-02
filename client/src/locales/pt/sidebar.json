@@ -1,0 +1,14 @@
+{
+    "new_task": "Nova Tarefa",
+    "overview": "Visão Geral",
+    "upcoming": "Faltando Fazer",
+    "complete": "Tarefas Concluídas",
+    "categories": "Categorias",
+    "loading_cat": "Carregando categorias...",
+    "no_categories": "Ops! Ainda não tem nenhuma categoria aqui",
+    "add_category": "Adicionar Categoria",
+    "create_category": "Criar Nova Categoria",
+    "name_category": "Nome da Categoria",
+    "color": "Escolha uma Cor",
+    "cancel": "Cancelar"
+}

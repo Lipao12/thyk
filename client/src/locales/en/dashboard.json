@@ -1,0 +1,12 @@
+{
+    "my_tasks":"My Tasks",
+    "daily":"Daily",
+    "weekly":"Weekly",
+    "monthly":"Monthly",
+    "tasks": "Tasks",
+    "empty_state":{
+        "title": "No tasks found",
+        "description": "`You don't have any tasks for this {{timeframe}} view. Create a new task to get started.",
+        "action_label": "Add Task"
+    }
+}

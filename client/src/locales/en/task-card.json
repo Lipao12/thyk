@@ -1,0 +1,22 @@
+{
+    "task_deleted": {
+        "title": "Task Deleted",
+        "description": "Your task has been successfully deleted! 👍"
+    },
+    "task_deleted_faild": {
+        "title": "Failed to Delete Task 🫥"
+    },
+    "task_complete": {
+        "complete": "completed",
+        "unconplete": "marked as incomplete",
+        "task_marked_incomplete": "Task Marked as Incomplete",
+        "task_completed": "Task Completed",
+        "task_status_message": "The task \"{{title}}\" has been {{status}} successfully 😉"
+    },
+    "task_complete_failed": {
+        "title": "Failed to Update Task 🫥"
+    },
+    "high": "High",
+    "medium": "Medium",
+    "low": "Low"
+}

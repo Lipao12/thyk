@@ -6,6 +6,7 @@ import Sidebar from "./components/sidebar";
 import TaskForm from "./components/task-form";
 import { Dialog } from "./components/ui/dialog";
 import { Toaster } from "./components/ui/toaster";
+import "./locales/i18n";
 import Completed from "./pages/completed";
 import Dashboard from "./pages/dashboard";
 import NotFound from "./pages/not-found";
@@ -66,7 +67,7 @@ function App() {
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       <Header toggleSidebar={toggleSidebar} openTaskModal={openTaskModal} />
 
-      <div className="flex flex-1 max-w-7xl mx-auto w-full">
+      <div className="flex flex-1 max-w-7xl mx-auto w-full justify-center">
         {/* Sidebar - Hidden on mobile, shown on desktop */}
         <Sidebar
           isOpen={isSidebarOpen}

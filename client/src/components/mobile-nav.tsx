@@ -1,12 +1,14 @@
-import { Button } from "./ui/button";
 import { CheckCircle, Clock, Home, Plus, Tag } from "lucide-react";
 import { Link, useLocation } from "wouter";
+import { Button } from "./ui/button";
+import { useTranslation } from "react-i18next";
 
 interface MobileNavProps {
   openTaskModal: () => void;
 }
 
 export default function MobileNav({ openTaskModal }: MobileNavProps) {
+  const { t } = useTranslation("mobile");
   const [location] = useLocation();
 
   return (
@@ -19,7 +21,7 @@ export default function MobileNav({ openTaskModal }: MobileNavProps) {
             } flex-1 h-full`}
           >
             <Home className="h-5 w-5" />
-            <span className="text-xs mt-1 font-medium">Home</span>
+            <span className="text-xs mt-1 font-medium">{t("home")}</span>
           </a>
         </Link>
 
@@ -30,17 +32,17 @@ export default function MobileNav({ openTaskModal }: MobileNavProps) {
             } flex-1 h-full`}
           >
             <Clock className="h-5 w-5" />
-            <span className="text-xs mt-1 font-medium">Upcoming</span>
+            <span className="text-xs mt-1 font-medium">{t("upcoming")}</span>
           </a>
         </Link>
 
-        <div className="flex-1 flex items-center justify-center">
+        <div className=" flex items-center justify-center">
           <Button
             id="mobileCreateBtn"
             className="w-14 h-14 rounded-full bg-thyk-gradient text-white flex items-center justify-center shadow-lg transform -translate-y-5"
             onClick={openTaskModal}
           >
-            <Plus className="h-6 w-6" />
+            <Plus className="h-8 w-8" />
           </Button>
         </div>
 
@@ -51,14 +53,16 @@ export default function MobileNav({ openTaskModal }: MobileNavProps) {
             } flex-1 h-full`}
           >
             <CheckCircle className="h-5 w-5" />
-            <span className="text-xs mt-1 font-medium">Done</span>
+            <span className="text-xs mt-1 font-medium">{t("done")}</span>
           </a>
         </Link>
 
-        <a className="flex flex-col items-center justify-center text-slate-500 flex-1 h-full">
-          <Tag className="h-5 w-5" />
-          <span className="text-xs mt-1 font-medium">Tags</span>
-        </a>
+        <Link href="/tags">
+          <a className="flex flex-col items-center justify-center text-slate-500 flex-1 h-full">
+            <Tag className="h-5 w-5" />
+            <span className="text-xs mt-1 font-medium">Tags</span>
+          </a>
+        </Link>
       </div>
     </div>
   );

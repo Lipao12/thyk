@@ -1,0 +1,13 @@
+{
+    "task_loading_error":{
+        "title": "Erro ao carregar as tarefas 🫥"
+    },
+    "completed_tasks":"Tarefas Concluídas",
+    "completed_singular":"tarefa completada",
+    "completed_plural":"tarefas completadas",
+    "empty_state":{
+        "title": "Você ainda não completou nenhuma tarefa 🙄",
+        "description": "Você ainda não completou nenhuma tarefa. Faça isso e elas estarão aqui.",
+        "action_label": "Adicionar Tarefa"
+    }
+}

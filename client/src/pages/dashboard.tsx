@@ -1,19 +1,19 @@
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import EmptyState from "../components/empty-state";
 import TaskCard from "../components/task-card";
-import { Button } from "../components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "../components/ui/tabs";
 import { useToast } from "../hooks/use-toast";
 import { formatDate } from "../lib/utils";
 import { TimeFrame } from "../types/schema";
-import { useQuery } from "@tanstack/react-query";
-import { Filter, SortDesc } from "lucide-react";
-import { useEffect, useState } from "react";
 
 interface DashboardProps {
   openTaskModal?: (taskId?: number) => void;
 }
 
 export default function Dashboard({ openTaskModal }: DashboardProps) {
+  const { t } = useTranslation("dashboard");
   const [timeframe, setTimeframe] = useState<TimeFrame>(TimeFrame.DAILY);
   const { toast } = useToast();
 
@@ -71,8 +71,8 @@ export default function Dashboard({ openTaskModal }: DashboardProps) {
     <>
       <div className="mb-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold">My Tasks</h2>
-          <div className="flex items-center space-x-2">
+          <h2 className="text-2xl font-bold">{t("my_tasks")}</h2>
+          {/*<div className="flex items-center space-x-2">
             <Button
               variant="outline"
               size="sm"
@@ -89,7 +89,7 @@ export default function Dashboard({ openTaskModal }: DashboardProps) {
               <SortDesc className="h-4 w-4" />
               <span>Sort</span>
             </Button>
-          </div>
+          </div>*/}
         </div>
 
         <div className="mt-5">
@@ -99,9 +99,11 @@ export default function Dashboard({ openTaskModal }: DashboardProps) {
             className="w-full"
           >
             <TabsList className="grid w-full grid-cols-3 max-w-md">
-              <TabsTrigger value={TimeFrame.DAILY}>Daily</TabsTrigger>
-              <TabsTrigger value={TimeFrame.WEEKLY}>Weekly</TabsTrigger>
-              <TabsTrigger value={TimeFrame.MONTHLY}>Monthly</TabsTrigger>
+              <TabsTrigger value={TimeFrame.DAILY}>{t("daily")}</TabsTrigger>
+              <TabsTrigger value={TimeFrame.WEEKLY}>{t("weekly")}</TabsTrigger>
+              <TabsTrigger value={TimeFrame.MONTHLY}>
+                {t("monthly")}
+              </TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
@@ -120,9 +122,9 @@ export default function Dashboard({ openTaskModal }: DashboardProps) {
         </div>
       ) : Object.keys(taskGroups).length === 0 ? (
         <EmptyState
-          title="No tasks found"
-          description={`You don't have any tasks for this ${timeframe} view. Create a new task to get started.`}
-          actionLabel="Add Task"
+          title={t("empty_state.title")}
+          description={t("empty_state.description", { timeframe: timeframe })}
+          actionLabel={t("empty_state.action_label")}
           onAction={() => openTaskModal && openTaskModal()}
         />
       ) : (
@@ -145,7 +147,7 @@ export default function Dashboard({ openTaskModal }: DashboardProps) {
                 {dateKey}
               </h3>
               <span className="text-sm text-gray-500">
-                {dateTasks.length} tasks
+                {dateTasks.length} {t("tasks")}
               </span>
             </div>
 

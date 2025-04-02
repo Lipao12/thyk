@@ -1,0 +1,13 @@
+{
+    "task_loading_error":{
+        "title": "Error on loading the tasks 🫥"
+    },
+    "completed_tasks":"Completed Tasks",
+    "completed_singular":"task completed",
+    "completed_plural":"tasks completed",
+    "empty_state":{
+        "title": "You didn'n complet any task yet... 🙄",
+        "description": "Você ainda não completou nenhuma tarefa. Faça isso e elas estarão aqui.",
+        "action_label": "Add Task"
+    }
+}

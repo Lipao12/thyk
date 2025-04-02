@@ -1,0 +1,12 @@
+{
+    "my_tasks":"Minhas Tarefas",
+    "daily":"Diário",
+    "weekly":"Semanal",
+    "monthly":"Mensal",
+    "tasks": "Tarefas",
+    "empty_state":{
+        "title": "Não encontrei nenhuma tarefa",
+        "description": "Você não possui nenhuma tarefa para {{timeframe}} view. Crie uma nova tarefa para começar essa jornada!",
+        "action_label": "Adicionar Tarefa"
+    }
+}

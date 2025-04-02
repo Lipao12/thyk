@@ -77,14 +77,19 @@ export default function TaskForm({ taskId, onClose }: TaskFormProps) {
 
   useEffect(() => {
     if (task && isEditing) {
-      form.reset({
-        title: task.title,
-        description: task.description || "",
-        dueDate: task.dueDate ? new Date(task.dueDate) : null,
-        priority: task.priority as "low" | "medium" | "high",
-        categoryId: task.categoryId || null,
-        userId: task.userId,
-      });
+      try {
+        JSON.stringify(task); // Testa se é serializável
+        form.reset({
+          title: task.title,
+          description: task.description || "",
+          dueDate: task.dueDate ? new Date(task.dueDate) : null,
+          priority: task.priority as "low" | "medium" | "high",
+          categoryId: task.categoryId || null,
+          userId: task.userId,
+        });
+      } catch (error) {
+        console.error("Error serializing task:", error);
+      }
     }
   }, [task, isEditing, form]);
 
@@ -94,7 +99,7 @@ export default function TaskForm({ taskId, onClose }: TaskFormProps) {
       const cleanValues: Record<string, any> = {
         title: values.title,
         description: values.description,
-        dueDate: values.dueDate,
+        dueDate: values.dueDate ? values.dueDate.toISOString() : null,
         priority: values.priority,
         categoryId: values.categoryId,
         userId: values.userId,

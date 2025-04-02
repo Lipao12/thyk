@@ -1,0 +1,22 @@
+{
+    "task_deleted":{
+        "title": "Tarefa Apagada",
+        "description": "Sua tarefa foi apagada com sucesso! 👍"
+    },
+    "task_deleted_faild":{
+        "title": "Falha ao Apagar a Tarefa 🫥"
+    },
+    "task_complete":{
+        "complete": "realizada",
+        "unconplete": "marcada como não feita",
+        "task_marked_incomplete": "Tarefa Marcada Como Não Feita",
+        "task_completed": "Tarefa Realizada",
+        "task_status_message": "A tarefa \"{{title}}\" foi {{status}} com sucesso 😉"
+    },
+    "task_complete_failed":{
+        "title": "Falha ao Atualizar a Tarefa 🫥"
+    },
+    "high":"Alto",
+    "medium":"Médio",
+    "low":"Baixo"
+}

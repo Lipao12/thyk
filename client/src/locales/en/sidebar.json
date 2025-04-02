@@ -1,0 +1,14 @@
+{
+    "new_task": "New Task",
+    "overview": "Overview",
+    "upcoming": "To Do",
+    "complete": "Completed Tasks",
+    "categories": "Categories",
+    "loading_cat": "Loading categories...",
+    "no_categories": "Oops! No categories here yet",
+    "add_category": "Add Category",
+    "create_category": "Create a New Category",
+    "name_category": "Category Name",
+    "color": "Pick a Color",
+    "cancel": "Cancel"
+}

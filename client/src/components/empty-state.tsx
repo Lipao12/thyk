@@ -1,5 +1,6 @@
+import { Plus } from "lucide-react";
+import Thinky from "../assets/thinky-error.png";
 import { Button } from "./ui/button";
-import { AlertCircle, Plus } from "lucide-react";
 
 interface EmptyStateProps {
   title: string;
@@ -15,9 +16,9 @@ export default function EmptyState({
   onAction,
 }: EmptyStateProps) {
   return (
-    <div className="border border-dashed rounded-lg p-8 mt-4 flex flex-col items-center justify-center text-center space-y-3">
-      <AlertCircle className="h-10 w-10 text-gray-400" />
-      <h3 className="text-lg font-medium">{title}</h3>
+    <div className="bg-gray-50 border-2 border-dashed rounded-lg p-8 mt-4 flex flex-col items-center justify-center text-center space-y-3">
+      <img src={Thinky} alt="Thinky error" />
+      <h3 className="text-lg text-black font-medium">{title}</h3>
       <p className="text-sm text-gray-500 max-w-md">{description}</p>
 
       {actionLabel && onAction && (

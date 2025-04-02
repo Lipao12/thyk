@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { CheckCircle, Clock, Home, Plus, X } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "wouter";
 import { useToast } from "../hooks/use-toast";
 import { apiRequest, queryClient } from "../lib/queryClient";
@@ -30,6 +31,7 @@ export default function Sidebar({
   setIsOpen,
   openTaskModal,
 }: SidebarProps) {
+  const { t } = useTranslation("sidebar");
   const [location] = useLocation();
   const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
   const [newCategory, setNewCategory] = useState({
@@ -105,14 +107,14 @@ export default function Sidebar({
               onClick={openTaskModal}
             >
               <Plus className="h-5 w-5 mr-2" />
-              New Task
+              {t("new_task")}
             </Button>
           </div>
 
           <nav>
             <div className="mb-2 px-4">
               <h3 className="text-xs uppercase tracking-wider text-slate-500 font-semibold">
-                Overview
+                {t("overview")}
               </h3>
             </div>
             <ul className="space-y-1 mb-6">
@@ -150,7 +152,7 @@ export default function Sidebar({
                           : "text-slate-500"
                       }`}
                     />
-                    Upcoming
+                    {t("upcoming")}
                   </a>
                 </Link>
               </li>
@@ -170,7 +172,7 @@ export default function Sidebar({
                           : "text-slate-500"
                       }`}
                     />
-                    Completed
+                    {t("complete")}
                   </a>
                 </Link>
               </li>
@@ -178,17 +180,17 @@ export default function Sidebar({
 
             <div className="mb-2 px-4">
               <h3 className="text-xs uppercase tracking-wider text-slate-500 font-semibold">
-                Categories
+                {t("categories")}
               </h3>
             </div>
             <ul className="space-y-1">
               {isLoading ? (
                 <li className="text-sm text-slate-500 px-4 py-2">
-                  Loading categories...
+                  {t("loading_cat")}
                 </li>
               ) : categories.length === 0 ? (
                 <li className="text-sm text-slate-500 px-4 py-2">
-                  No categories yet
+                  {t("no_categories")}
                 </li>
               ) : (
                 categories.map((category: Category) => (
@@ -217,16 +219,18 @@ export default function Sidebar({
                       className="flex items-center py-2 px-4 w-full text-left rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition text-secondary justify-start"
                     >
                       <Plus className="h-4 w-4 mr-2" />
-                      <span className="text-sm">Add Category</span>
+                      <span className="text-sm">{t("add_category")}</span>
                     </Button>
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
-                      <DialogTitle>Create New Category</DialogTitle>
+                      <DialogTitle>{t("create_category")}</DialogTitle>
                     </DialogHeader>
                     <div className="space-y-4 pt-4">
                       <div className="space-y-2">
-                        <Label htmlFor="category-name">Category Name</Label>
+                        <Label htmlFor="category-name">
+                          {t("name_category")}
+                        </Label>
                         <Input
                           id="category-name"
                           placeholder="Work, Personal, Study..."
@@ -240,7 +244,7 @@ export default function Sidebar({
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="category-color">Color</Label>
+                        <Label htmlFor="category-color">{t("color")}</Label>
                         <div className="flex items-center space-x-2">
                           <Input
                             id="category-color"
@@ -267,13 +271,13 @@ export default function Sidebar({
                           variant="outline"
                           onClick={() => setIsAddCategoryOpen(false)}
                         >
-                          Cancel
+                          {t("cancel")}
                         </Button>
                         <Button
                           onClick={handleCreateCategory}
                           className="bg-primary hover:bg-primary/90"
                         >
-                          Create Category
+                          {t("create_category")}
                         </Button>
                       </div>
                     </div>
