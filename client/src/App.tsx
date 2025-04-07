@@ -1,14 +1,18 @@
-import { useState } from "react";
-import { Route, Switch, Router as WouterRouter } from "wouter";
+import { signOut } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { Route, Switch, Router as WouterRouter, useLocation } from "wouter";
 import Header from "./components/header";
 import MobileNav from "./components/mobile-nav";
 import Sidebar from "./components/sidebar";
 import TaskForm from "./components/task-form";
 import { Dialog } from "./components/ui/dialog";
 import { Toaster } from "./components/ui/toaster";
+import { useAuth } from "./context/auth-context";
+import { auth } from "./lib/firebase";
 import "./locales/i18n";
 import Completed from "./pages/completed";
 import Dashboard from "./pages/dashboard";
+import Login from "./pages/login";
 import NotFound from "./pages/not-found";
 import Upcoming from "./pages/upcoming";
 
@@ -23,21 +27,59 @@ const CompletedRoute = (props: any) => (
   <Completed openTaskModal={props.openTaskModal} />
 );
 
-function Router({
+// Protected route component
+function ProtectedRoute({
+  children,
+  isAuthenticated,
+}: {
+  children: React.ReactNode;
+  isAuthenticated: boolean;
+}) {
+  const [, setLocation] = useLocation();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setLocation("/login");
+    }
+  }, [isAuthenticated, setLocation]);
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  return <>{children}</>;
+}
+
+function AppRouter({
   openTaskModal,
+  isAuthenticated,
 }: {
   openTaskModal: (taskId?: number) => void;
+  isAuthenticated: boolean;
 }) {
   return (
     <Switch>
+      <Route path="/login">
+        {isAuthenticated ? (
+          <Dashboard openTaskModal={openTaskModal} />
+        ) : (
+          <Login />
+        )}
+      </Route>
       <Route path="/">
-        <DashboardRoute openTaskModal={openTaskModal} />
+        <ProtectedRoute isAuthenticated={isAuthenticated}>
+          <DashboardRoute openTaskModal={openTaskModal} />
+        </ProtectedRoute>
       </Route>
       <Route path="/upcoming">
-        <UpcomingRoute openTaskModal={openTaskModal} />
+        <ProtectedRoute isAuthenticated={isAuthenticated}>
+          <UpcomingRoute openTaskModal={openTaskModal} />
+        </ProtectedRoute>
       </Route>
       <Route path="/completed">
-        <CompletedRoute openTaskModal={openTaskModal} />
+        <ProtectedRoute isAuthenticated={isAuthenticated}>
+          <CompletedRoute openTaskModal={openTaskModal} />
+        </ProtectedRoute>
       </Route>
       <Route>
         <NotFound />
@@ -50,6 +92,25 @@ function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<number | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [location] = useLocation();
+  const { user, userData, loading } = useAuth();
+
+  /*useEffect(() => {
+    // Check if user is logged in
+    const userData = localStorage.getItem("thyk_user");
+    if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        setIsAuthenticated(!!user.isLoggedIn);
+      } catch (e) {
+        setIsAuthenticated(false);
+      }
+    }
+  }, [location]);*/
+  useEffect(() => {
+    setIsAuthenticated(!!user);
+  }, [user]);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
@@ -63,11 +124,47 @@ function App() {
     setEditingTask(null);
   };
 
+  /*const handleLogout = () => {
+    localStorage.removeItem("thyk_user");
+    setIsAuthenticated(false);
+  };*/
+  const handleLogout = async () => {
+    try {
+      await signOut(auth); // Desloga do Firebase
+      localStorage.removeItem("thyk_user");
+      setIsAuthenticated(false);
+    } catch (error) {
+      console.error("Erro ao deslogar:", error);
+    }
+  };
+
+  if (loading) return <p>Carregando...</p>;
+
+  if (user) {
+    console.log("Firebase User:", user);
+    console.log("Firestore User Data:", userData);
+  }
+
+  // Don't render the app layout for login page
+  if (location === "/login" && !isAuthenticated) {
+    return (
+      <WouterRouter>
+        <Login />
+        <Toaster />
+      </WouterRouter>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
-      <Header toggleSidebar={toggleSidebar} openTaskModal={openTaskModal} />
+      <Header
+        toggleSidebar={toggleSidebar}
+        openTaskModal={openTaskModal}
+        onLogout={handleLogout}
+        user={isAuthenticated ? userData : null}
+      />
 
-      <div className="flex flex-1 max-w-7xl mx-auto w-full justify-center">
+      <div className="flex flex-1 max-w-7xl mx-auto w-full">
         {/* Sidebar - Hidden on mobile, shown on desktop */}
         <Sidebar
           isOpen={isSidebarOpen}
@@ -78,7 +175,10 @@ function App() {
         {/* Main Content */}
         <main className="flex-1 p-4 pb-20 md:p-6">
           <WouterRouter>
-            <Router openTaskModal={openTaskModal} />
+            <AppRouter
+              openTaskModal={openTaskModal}
+              isAuthenticated={isAuthenticated}
+            />
           </WouterRouter>
         </main>
       </div>

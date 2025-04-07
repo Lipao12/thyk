@@ -1,7 +1,7 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
 import * as localStorageService from "./local-storage";
 
-function safeStringify(obj) {
+function safeStringify(obj: any) {
   const seen = new WeakSet();
   return JSON.stringify(obj, (key, value) => {
     if (typeof value === "object" && value !== null) {

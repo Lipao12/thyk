@@ -13,7 +13,7 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ openTaskModal }: DashboardProps) {
-  const { t } = useTranslation("dashboard");
+  const { t, i18n } = useTranslation("dashboard");
   const [timeframe, setTimeframe] = useState<TimeFrame>(TimeFrame.DAILY);
   const { toast } = useToast();
 
@@ -42,7 +42,6 @@ export default function Dashboard({ openTaskModal }: DashboardProps) {
     }
   };
 
-  // Group tasks by date
   const groupTasksByDate = () => {
     const groups: Record<string, any[]> = {};
 
@@ -55,7 +54,7 @@ export default function Dashboard({ openTaskModal }: DashboardProps) {
       }
 
       const date = new Date(task.dueDate);
-      const key = formatDate(date);
+      const key = formatDate(date, i18n.language);
 
       if (!groups[key]) groups[key] = [];
       groups[key].push(task);

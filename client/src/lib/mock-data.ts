@@ -62,6 +62,30 @@ export const mockTasks: TaskWithCategory[] = [
     category: mockCategories[0]
   },
   {
+    id: 7,
+    title: "Connect to Firebase",
+    description: "Update all components with new color scheme and typography",
+    dueDate: today,
+    completed: false,
+    priority: Priority.HIGH,
+    userId: 1,
+    categoryId: 1,
+    createdAt: yesterday,
+    category: mockCategories[0]
+  },
+  {
+    id: 8,
+    title: "Connect to Firebase",
+    description: "Update all components with new color scheme and typography",
+    dueDate: today,
+    completed: false,
+    priority: Priority.HIGH,
+    userId: 1,
+    categoryId: 1,
+    createdAt: yesterday,
+    category: mockCategories[0]
+  },
+  {
     id: 2,
     title: "Workout session",
     description: "30 minute cardio and strength training",

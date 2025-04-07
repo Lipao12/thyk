@@ -23,7 +23,7 @@ import { ScrollArea } from "./ui/scroll-area";
 interface SidebarProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  openTaskModal: () => void;
+  openTaskModal: (task?: number) => void;
 }
 
 export default function Sidebar({
@@ -34,14 +34,21 @@ export default function Sidebar({
   const { t } = useTranslation("sidebar");
   const [location] = useLocation();
   const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
-  const [newCategory, setNewCategory] = useState({
+  const [newCategory, setNewCategory] = useState<{
+    name: string;
+    color: string;
+  }>({
     name: "",
     color: "#7B57FF",
   }); // Updated default color
   const { toast } = useToast();
 
-  const { data: categories = [], isLoading } = useQuery({
+  const { data: categories = [], isLoading } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
+    queryFn: async () => {
+      const response = await apiRequest("GET", "/api/categories");
+      return response as Category[];
+    },
   });
 
   const handleCreateCategory = async () => {
@@ -104,7 +111,9 @@ export default function Sidebar({
             <Button
               id="createTaskBtn"
               className="w-full flex items-center justify-center py-6 bg-thyk-gradient hover:opacity-90 text-white rounded-lg font-medium transition shadow-md"
-              onClick={openTaskModal}
+              onClick={() => {
+                openTaskModal(undefined);
+              }}
             >
               <Plus className="h-5 w-5 mr-2" />
               {t("new_task")}
@@ -119,61 +128,58 @@ export default function Sidebar({
             </div>
             <ul className="space-y-1 mb-6">
               <li>
-                <Link href="/">
-                  <a
-                    className={`flex items-center py-2.5 px-4 rounded-lg ${
-                      location === "/"
-                        ? "bg-slate-100 dark:bg-slate-800 font-medium"
-                        : "hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                <Link
+                  href="/"
+                  className={`flex items-center py-2.5 px-4 rounded-lg ${
+                    location === "/"
+                      ? "bg-slate-100 dark:bg-slate-800 font-medium"
+                      : "hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                  }`}
+                >
+                  <Home
+                    className={`h-5 w-5 mr-3 ${
+                      location === "/" ? "text-primary" : "text-slate-500"
                     }`}
-                  >
-                    <Home
-                      className={`h-5 w-5 mr-3 ${
-                        location === "/" ? "text-primary" : "text-slate-500"
-                      }`}
-                    />
-                    Dashboard
-                  </a>
+                  />
+                  Dashboard
                 </Link>
               </li>
               <li>
-                <Link href="/upcoming">
-                  <a
-                    className={`flex items-center py-2.5 px-4 rounded-lg ${
+                <Link
+                  href="/upcoming"
+                  className={`flex items-center py-2.5 px-4 rounded-lg ${
+                    location === "/upcoming"
+                      ? "bg-slate-100 dark:bg-slate-800 font-medium"
+                      : "hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                  }`}
+                >
+                  <Clock
+                    className={`h-5 w-5 mr-3 ${
                       location === "/upcoming"
-                        ? "bg-slate-100 dark:bg-slate-800 font-medium"
-                        : "hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                        ? "text-primary"
+                        : "text-slate-500"
                     }`}
-                  >
-                    <Clock
-                      className={`h-5 w-5 mr-3 ${
-                        location === "/upcoming"
-                          ? "text-primary"
-                          : "text-slate-500"
-                      }`}
-                    />
-                    {t("upcoming")}
-                  </a>
+                  />
+                  {t("upcoming")}
                 </Link>
               </li>
               <li>
-                <Link href="/completed">
-                  <a
-                    className={`flex items-center py-2.5 px-4 rounded-lg ${
+                <Link
+                  href="/completed"
+                  className={`flex items-center py-2.5 px-4 rounded-lg ${
+                    location === "/completed"
+                      ? "bg-slate-100 dark:bg-slate-800 font-medium"
+                      : "hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                  }`}
+                >
+                  <CheckCircle
+                    className={`h-5 w-5 mr-3 ${
                       location === "/completed"
-                        ? "bg-slate-100 dark:bg-slate-800 font-medium"
-                        : "hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                        ? "text-primary"
+                        : "text-slate-500"
                     }`}
-                  >
-                    <CheckCircle
-                      className={`h-5 w-5 mr-3 ${
-                        location === "/completed"
-                          ? "text-primary"
-                          : "text-slate-500"
-                      }`}
-                    />
-                    {t("complete")}
-                  </a>
+                  />
+                  {t("complete")}
                 </Link>
               </li>
             </ul>
@@ -194,17 +200,15 @@ export default function Sidebar({
                 </li>
               ) : (
                 categories.map((category: Category) => (
-                  <li key={category.id}>
-                    <a
-                      href="#"
-                      className="flex items-center py-2 px-4 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-                    >
-                      <ColorBadge color={category.color} className="mr-3" />
-                      <span className="text-sm">{category.name}</span>
-                      <span className="ml-auto text-xs text-slate-500">
-                        {/* Count could be implemented with a separate query */}
-                      </span>
-                    </a>
+                  <li
+                    key={category.id}
+                    className="flex items-center py-2 px-4 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-auto"
+                  >
+                    <ColorBadge color={category.color} className="mr-3" />
+                    <span className="text-sm">{category.name}</span>
+                    <span className="ml-auto text-xs text-slate-500">
+                      {/* Count could be implemented with a separate query */}
+                    </span>
                   </li>
                 ))
               )}

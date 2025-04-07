@@ -5,6 +5,7 @@ import { initReactI18next } from "react-i18next";
 import enCompleted from "./en/completed.json";
 import enDashboard from "./en/dashboard.json";
 import enHeader from "./en/header.json";
+import enLogin from "./en/login.json";
 import enMobile from "./en/mobile.json";
 import enNotFound from "./en/not-found.json";
 import enSidebar from "./en/sidebar.json";
@@ -13,6 +14,7 @@ import enUpcoming from "./en/upcoming.json";
 import ptCompleted from "./pt/completed.json";
 import ptDashboard from "./pt/dashboard.json";
 import ptHeader from "./pt/header.json";
+import ptLogin from "./pt/login.json";
 import ptMobile from "./pt/mobile.json";
 import ptNotFound from "./pt/not-found.json";
 import ptSidebar from "./pt/sidebar.json";
@@ -30,6 +32,7 @@ const resources = {
     completed: ptCompleted,
     not_found: ptNotFound,
     upcoming: ptUpcoming,
+    login: ptLogin,
   },
   en: {
     header: enHeader,
@@ -40,6 +43,7 @@ const resources = {
     completed:enCompleted,
     not_found: enNotFound,
     upcoming: enUpcoming,
+    login: enLogin,
   }
 };
 

@@ -14,7 +14,7 @@ interface TaskCardProps {
 }
 
 export default function TaskCard({ task, onEdit }: TaskCardProps) {
-  const { t } = useTranslation("task_card");
+  const { t, i18n } = useTranslation("task_card");
   const [isDeleting, setIsDeleting] = useState(false);
   const [isCompleting, setIsCompleting] = useState(false);
   const { toast } = useToast();
@@ -209,7 +209,7 @@ export default function TaskCard({ task, onEdit }: TaskCardProps) {
             >
               {task.title}
             </h4>
-            <div className="task-actions flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="task-actions flex space-x-1 opacity-100">
               <Button
                 variant="ghost"
                 size="icon"
@@ -239,7 +239,7 @@ export default function TaskCard({ task, onEdit }: TaskCardProps) {
           <div className="mt-3 flex flex-wrap items-center gap-2">
             {task.category && (
               <div
-                className={`px-2 py-1 ${categoryStyle.bg} ${categoryStyle.text} text-xs rounded-md font-medium`}
+                className={`px-2 py-1 ${categoryStyle.bg} ${categoryStyle.text}  text-xs rounded-md font-medium`}
               >
                 {task.category.name}
               </div>
@@ -250,9 +250,10 @@ export default function TaskCard({ task, onEdit }: TaskCardProps) {
             {task.dueDate && (
               <div className="flex items-center text-xs text-slate-500 dark:text-slate-400">
                 <Clock className="h-3.5 w-3.5 mr-1" />
-                {formatTime(task.dueDate)
-                  ? `${formatDate(task.dueDate)} at ${formatTime(task.dueDate)}`
-                  : formatDate(task.dueDate)}
+                {formatTime(task.dueDate, i18n.language)
+                  ? `${formatDate(task.dueDate, i18n.language)} ${t("at")}
+                  ${formatTime(task.dueDate, i18n.language)}`
+                  : formatDate(task.dueDate, i18n.language)}
               </div>
             )}
           </div>

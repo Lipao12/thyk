@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useToast } from "../hooks/use-toast";
@@ -42,9 +42,16 @@ interface TaskFormProps {
 }
 
 const formSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  description: z.string().optional(),
-  dueDate: z.date().optional().nullable(),
+  title: z.string().min(1, "Title must be at least 1 character"),
+  description: z.string().max(500, "Description too long").optional(),
+  dueDate: z
+    .date()
+    .min(
+      new Date(new Date().setDate(new Date().getDate() - 1)), // yesterday
+      "Due date cannot be in the past"
+    )
+    .optional()
+    .nullable(),
   priority: z.enum(["low", "medium", "high"]).default("medium"),
   categoryId: z.number().optional().nullable(),
   userId: z.number().default(1), // Hardcoded for demo
@@ -53,14 +60,16 @@ const formSchema = z.object({
 export default function TaskForm({ taskId, onClose }: TaskFormProps) {
   const { toast } = useToast();
   const isEditing = taskId !== null;
+  const [isTaskLoading, setIsTaskLoading] = useState(false);
 
   const { data: categories = [] } = useQuery({
     queryKey: ["/api/categories"],
   });
 
-  const { data: task, isLoading: isTaskLoading } = useQuery({
+  const { data: task, isLoading: isFetchingTask } = useQuery({
     queryKey: ["/api/tasks", taskId],
-    enabled: isEditing,
+    queryFn: () => apiRequest("GET", `/api/tasks/${taskId}`),
+    enabled: isEditing, // Only fetch if editing
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -76,22 +85,31 @@ export default function TaskForm({ taskId, onClose }: TaskFormProps) {
   });
 
   useEffect(() => {
+    console.log("IS EDITING: ", isEditing);
     if (task && isEditing) {
-      try {
-        JSON.stringify(task); // Testa se é serializável
-        form.reset({
-          title: task.title,
-          description: task.description || "",
-          dueDate: task.dueDate ? new Date(task.dueDate) : null,
-          priority: task.priority as "low" | "medium" | "high",
-          categoryId: task.categoryId || null,
-          userId: task.userId,
-        });
-      } catch (error) {
-        console.error("Error serializing task:", error);
-      }
+      form.reset({
+        title: task.title,
+        description: task.description || "",
+        dueDate: task.dueDate ? new Date(task.dueDate) : null,
+        priority: task.priority,
+        categoryId: task.categoryId || null,
+        userId: task.userId || 1,
+      });
     }
   }, [task, isEditing, form]);
+
+  useEffect(() => {
+    if (!isEditing) {
+      form.reset({
+        title: "",
+        description: "",
+        dueDate: null,
+        priority: "medium",
+        categoryId: null,
+        userId: 1,
+      });
+    }
+  }, [isEditing, form]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -118,6 +136,9 @@ export default function TaskForm({ taskId, onClose }: TaskFormProps) {
           description: "New task has been created successfully",
         });
       }
+
+      form.reset(); // Reset to defaultValues for NEW tasks
+      // Alternative: form.reset({ ...defaultValues, userId: 1 }) if needed
 
       queryClient.invalidateQueries({ queryKey: ["/api/tasks"] });
       // Invalidate all timeframe queries
@@ -147,8 +168,10 @@ export default function TaskForm({ taskId, onClose }: TaskFormProps) {
     );
   }
 
+  console.log(taskId, isEditing);
+
   return (
-    <DialogContent className="sm:max-w-[425px]">
+    <DialogContent className="max-w-[360px] md:max-w-[425px]">
       <DialogHeader>
         <DialogTitle>{isEditing ? "Edit Task" : "Add New Task"}</DialogTitle>
       </DialogHeader>
@@ -238,8 +261,11 @@ export default function TaskForm({ taskId, onClose }: TaskFormProps) {
               <FormItem>
                 <FormLabel>Category</FormLabel>
                 <Select
+                  //onValueChange={(value) =>
+                  //  field.onChange(value ? parseInt(value) : null)
+                  //}
                   onValueChange={(value) =>
-                    field.onChange(value ? parseInt(value) : null)
+                    field.onChange(value === "null" ? null : Number(value))
                   }
                   value={field.value?.toString() || ""}
                 >
@@ -249,7 +275,16 @@ export default function TaskForm({ taskId, onClose }: TaskFormProps) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="">None</SelectItem>
+                    <SelectItem
+                      /*onValueChange={(value) =>
+                        field.onChange(
+                          value === "null" ? null : parseInt(value)
+                        )
+                      }*/
+                      value={field.value?.toString() || "null"}
+                    >
+                      None
+                    </SelectItem>
                     {(categories as any[]).map((category: any) => (
                       <SelectItem
                         key={category.id}
@@ -279,13 +314,13 @@ export default function TaskForm({ taskId, onClose }: TaskFormProps) {
                 <FormLabel>Priority</FormLabel>
                 <FormControl>
                   <RadioGroup
-                    onValueChange={field.onChange}
+                    onValueChange={(value) => field.onChange(value)}
                     defaultValue={field.value}
                     className="flex space-x-3"
                   >
                     <FormItem className="flex items-center space-x-2 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="low" className="text-accent" />
+                        <RadioGroupItem value="low" className="text-primary " />
                       </FormControl>
                       <FormLabel className="font-normal">Low</FormLabel>
                     </FormItem>
@@ -300,7 +335,7 @@ export default function TaskForm({ taskId, onClose }: TaskFormProps) {
                     </FormItem>
                     <FormItem className="flex items-center space-x-2 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="high" className="text-primary" />
+                        <RadioGroupItem value="high" className="text-accent" />
                       </FormControl>
                       <FormLabel className="font-normal">High</FormLabel>
                     </FormItem>
@@ -311,7 +346,7 @@ export default function TaskForm({ taskId, onClose }: TaskFormProps) {
             )}
           />
 
-          <DialogFooter className="mt-6 flex justify-end space-x-3">
+          <DialogFooter className="mt-6 flex flex-row justify-end space-x-3">
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
