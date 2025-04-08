@@ -12,6 +12,7 @@ import { auth } from "./lib/firebase";
 import "./locales/i18n";
 import Completed from "./pages/completed";
 import Dashboard from "./pages/dashboard";
+import { Loading } from "./pages/loading";
 import Login from "./pages/login";
 import NotFound from "./pages/not-found";
 import Upcoming from "./pages/upcoming";
@@ -138,7 +139,7 @@ function App() {
     }
   };
 
-  if (loading) return <p>Carregando...</p>;
+  if (loading) return <Loading />;
 
   if (user) {
     console.log("Firebase User:", user);

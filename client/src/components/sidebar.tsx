@@ -1,5 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { CheckCircle, Clock, Home, Plus, X } from "lucide-react";
+import { getAuth } from "firebase/auth";
+import {
+  CheckCircle,
+  Clock,
+  Home,
+  Pencil,
+  Plus,
+  Trash2,
+  X,
+} from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "wouter";
@@ -42,6 +51,9 @@ export default function Sidebar({
     color: "#7B57FF",
   }); // Updated default color
   const { toast } = useToast();
+  const auth = getAuth();
+  const userId = auth.currentUser?.uid;
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const { data: categories = [], isLoading } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
@@ -50,6 +62,34 @@ export default function Sidebar({
       return response as Category[];
     },
   });
+
+  const handleTaskDelete = async (category: Category) => {
+    if (isDeleting) return;
+
+    try {
+      setIsDeleting(true);
+      await apiRequest("DELETE", `/api/categories/${category.id}`);
+
+      queryClient.invalidateQueries({ queryKey: ["/api/categories"] });
+      queryClient.invalidateQueries({
+        queryKey: ["/api/categories/timeframe"],
+      });
+
+      toast({
+        title: t("category_deleted.title"),
+        description: t("category_deleted.description"),
+      });
+    } catch (error) {
+      toast({
+        title: t("category_deleted_faild.title"),
+        description:
+          error instanceof Error ? error.message : "Unknown error occurred",
+        variant: "destructive",
+      });
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   const handleCreateCategory = async () => {
     if (!newCategory.name.trim()) {
@@ -65,7 +105,7 @@ export default function Sidebar({
       await apiRequest("POST", "/api/categories", {
         name: newCategory.name,
         color: newCategory.color,
-        userId: 1, // Hardcoded for demo
+        userId: userId,
       });
 
       queryClient.invalidateQueries({ queryKey: ["/api/categories"] });
@@ -207,6 +247,27 @@ export default function Sidebar({
                     <ColorBadge color={category.color} className="mr-3" />
                     <span className="text-sm">{category.name}</span>
                     <span className="ml-auto text-xs text-slate-500">
+                      <div className="task-actions flex space-x-1 opacity-100">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6 text-slate-500 hover:text-primary dark:text-slate-400 dark:hover:text-primary"
+                          onClick={() => {}}
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6 text-slate-500 hover:text-accent dark:text-slate-400 dark:hover:text-accent"
+                          onClick={() => {
+                            handleTaskDelete(category);
+                          }}
+                          disabled={isDeleting}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                       {/* Count could be implemented with a separate query */}
                     </span>
                   </li>

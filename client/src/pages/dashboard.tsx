@@ -46,15 +46,9 @@ export default function Dashboard({ openTaskModal }: DashboardProps) {
     const groups: Record<string, any[]> = {};
 
     (tasks as any[]).forEach((task: any) => {
-      if (!task.dueDate) {
-        const key = "No Date";
-        if (!groups[key]) groups[key] = [];
-        groups[key].push(task);
-        return;
-      }
-
-      const date = new Date(task.dueDate);
-      const key = formatDate(date, i18n.language);
+      const key = task.dueDate
+        ? formatDate(task.dueDate, i18n.language)
+        : t("no_date"); // ou "No Date" direto se preferir
 
       if (!groups[key]) groups[key] = [];
       groups[key].push(task);

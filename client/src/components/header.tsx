@@ -51,8 +51,6 @@ export default function Header({
     return null;
   }
 
-  console.log("Nome: ", user?.name);
-
   return (
     <header className="bg-white dark:bg-gray-800 drop-shadow-[0_10px_5px_rgba(100,100,100,0.1)] px-4 py-3 sticky top-0 z-50 ">
       <div className="max-w-7xl mx-auto flex items-center justify-between">

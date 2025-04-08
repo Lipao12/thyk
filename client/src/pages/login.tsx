@@ -356,7 +356,7 @@ export default function Login() {
             {t("copy")}
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
             <div className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm">
               <h3 className="font-semibold mb-2 text-accent">{t("daily")}</h3>
               <p className="text-sm text-slate-600 dark:text-slate-400">
@@ -364,7 +364,7 @@ export default function Login() {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm">
+            <div className="bg-white dark:bg-slate-800 p-2 rounded-lg shadow-sm">
               <h3 className="font-semibold mb-2 text-secondary">
                 {t("weekly")}
               </h3>
@@ -382,7 +382,7 @@ export default function Login() {
           </div>
 
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            {t("copy_2")}
+            {/*t("copy_2")*/}
             <br />
             {t("call")}
           </p>

@@ -8,7 +8,6 @@ import { auth, db } from "./firebase";
 export async function googleLogin() {
   const provider = new GoogleAuthProvider();
   if (auth) {
-    console.log("Teste")
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
 

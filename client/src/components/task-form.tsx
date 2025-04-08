@@ -5,6 +5,7 @@ import { CalendarIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useAuth } from "../context/auth-context";
 import { useToast } from "../hooks/use-toast";
 import { apiRequest, queryClient } from "../lib/queryClient";
 import { cn } from "../lib/utils";
@@ -54,13 +55,14 @@ const formSchema = z.object({
     .nullable(),
   priority: z.enum(["low", "medium", "high"]).default("medium"),
   categoryId: z.number().optional().nullable(),
-  userId: z.number().default(1), // Hardcoded for demo
+  userId: z.string(), // Hardcoded for demo
 });
 
 export default function TaskForm({ taskId, onClose }: TaskFormProps) {
   const { toast } = useToast();
   const isEditing = taskId !== null;
   const [isTaskLoading, setIsTaskLoading] = useState(false);
+  const { user } = useAuth();
 
   const { data: categories = [] } = useQuery({
     queryKey: ["/api/categories"],
@@ -80,12 +82,11 @@ export default function TaskForm({ taskId, onClose }: TaskFormProps) {
       dueDate: null,
       priority: "medium",
       categoryId: null,
-      userId: 1,
+      userId: user?.uid,
     },
   });
 
   useEffect(() => {
-    console.log("IS EDITING: ", isEditing);
     if (task && isEditing) {
       form.reset({
         title: task.title,
@@ -93,7 +94,7 @@ export default function TaskForm({ taskId, onClose }: TaskFormProps) {
         dueDate: task.dueDate ? new Date(task.dueDate) : null,
         priority: task.priority,
         categoryId: task.categoryId || null,
-        userId: task.userId || 1,
+        userId: task.userId || user?.uid,
       });
     }
   }, [task, isEditing, form]);
@@ -106,7 +107,7 @@ export default function TaskForm({ taskId, onClose }: TaskFormProps) {
         dueDate: null,
         priority: "medium",
         categoryId: null,
-        userId: 1,
+        userId: user?.uid,
       });
     }
   }, [isEditing, form]);
@@ -117,7 +118,7 @@ export default function TaskForm({ taskId, onClose }: TaskFormProps) {
       const cleanValues: Record<string, any> = {
         title: values.title,
         description: values.description,
-        dueDate: values.dueDate ? values.dueDate.toISOString() : null,
+        dueDate: values.dueDate ? values.dueDate : null,
         priority: values.priority,
         categoryId: values.categoryId,
         userId: values.userId,
@@ -167,8 +168,6 @@ export default function TaskForm({ taskId, onClose }: TaskFormProps) {
       </DialogContent>
     );
   }
-
-  console.log(taskId, isEditing);
 
   return (
     <DialogContent className="max-w-[360px] md:max-w-[425px]">

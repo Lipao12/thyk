@@ -53,6 +53,8 @@ export default function Upcoming({ openTaskModal }: UpcomingProps) {
     const thisWeekTasks: any[] = [];
     const laterTasks: any[] = [];
 
+    console.log("This are all the tasks: ", tasks);
+
     tasks.forEach((task: any) => {
       if (!task.dueDate) {
         // Skip tasks without due date
@@ -89,6 +91,8 @@ export default function Upcoming({ openTaskModal }: UpcomingProps) {
   const hasTasks = Object.values(filteredTasks).some(
     (group) => group.length > 0
   );
+
+  console.log(filteredTasks);
 
   return (
     <>

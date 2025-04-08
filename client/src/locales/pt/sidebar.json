@@ -10,5 +10,12 @@
     "create_category": "Criar Nova Categoria",
     "name_category": "Nome da Categoria",
     "color": "Escolha uma Cor",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "category_deleted":{
+        "title": "Categoria Apagada",
+        "description": "Sua categoria foi apagada com sucesso! 👍"
+    },
+    "category_deleted_faild":{
+        "title": "Falha ao Apagar a Categoria 🫥"
+    }
 }

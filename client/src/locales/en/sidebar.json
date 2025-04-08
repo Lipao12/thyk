@@ -10,5 +10,12 @@
     "create_category": "Create a New Category",
     "name_category": "Category Name",
     "color": "Pick a Color",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "category_deleted": {
+        "title": "Category Deleted",
+        "description": "Your category has been successfully deleted! 👍"
+    },
+    "category_deleted_faild": {
+        "title": "Failed to Delete category 🫥"
+    }
 }
