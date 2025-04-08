@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import EmptyState from "../components/empty-state";
 import TaskCard from "../components/task-card";
 import { useToast } from "../hooks/use-toast";
+import { Task } from "../types/schema";
 
 interface UpcomingProps {
   openTaskModal?: (taskId?: number) => void;
@@ -24,7 +25,7 @@ export default function Upcoming({ openTaskModal }: UpcomingProps) {
     data: tasks = [],
     isLoading,
     error,
-  } = useQuery({
+  } = useQuery<Task[]>({
     queryKey: ["/api/tasks"],
   });
 
@@ -61,7 +62,9 @@ export default function Upcoming({ openTaskModal }: UpcomingProps) {
         return;
       }
 
-      const dueDate = new Date(task.dueDate);
+      const dueDate = task.dueDate.toDate
+        ? task.dueDate.toDate()
+        : new Date(task.dueDate);
 
       if (isToday(dueDate)) {
         todayTasks.push(task);
