@@ -12,8 +12,15 @@ import {
   updateDoc,
   where
 } from "firebase/firestore";
-import { Task } from "../types/schema";
 import { db } from "./firebase";
+
+interface TaskData {
+  userId: string;
+}
+
+interface CategoryData {
+  userId: string;
+}
 
 function safeStringify(obj: any) {
   const seen = new WeakSet();
@@ -75,8 +82,7 @@ export async function apiRequest(
         const docRef = doc(db, "tasks", id.toString());
         const docSnap = await getDoc(docRef);
         if (!docSnap.exists()) throw new Error(`Task with ID ${id} not found`);
-        //const taskData = docSnap.data() as Task;
-        const task = { id: docSnap.id, ...docSnap.data() };
+        const task = { id: docSnap.id, ...docSnap.data() } as TaskData & { id: string };
 
         if (task.userId !== userId) {
           throw new Error("Unauthorized access to task");
@@ -176,7 +182,7 @@ export async function apiRequest(
         }
       
         const categoryData = docSnap.data();
-        const category = { id: docSnap.id, ...categoryData };
+        const category = { id: docSnap.id, ...categoryData } as CategoryData & { id: string };
       
         if (category.userId !== userId) {
           throw new Error("Acesso não autorizado a esta categoria.");
