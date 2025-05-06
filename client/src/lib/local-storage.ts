@@ -1,11 +1,4 @@
 import {
-  Category,
-  Priority,
-  Task,
-  TaskWithCategory,
-  TimeFrame,
-} from "../types/schema";
-import {
   endOfDay,
   endOfMonth,
   endOfWeek,
@@ -13,6 +6,13 @@ import {
   startOfMonth,
   startOfWeek,
 } from "date-fns";
+import {
+  Category,
+  Priority,
+  Task,
+  TaskWithCategory,
+  TimeFrame,
+} from "../types/schema";
 import { initialData } from "./mock-data";
 
 // localStorage keys
@@ -82,7 +82,7 @@ export const getTasksByTimeframe = (
 
 export const getTaskById = (id: number): TaskWithCategory | undefined => {
   const data = getData();
-  return data.tasks.find((task: TaskWithCategory) => task.id === id);
+  return data.tasks.find((task: TaskWithCategory) => task.id === id.toString());
 };
 
 export const createTask = (task: Partial<Task>): TaskWithCategory => {
@@ -90,7 +90,7 @@ export const createTask = (task: Partial<Task>): TaskWithCategory => {
 
   // Find the associated category
   const category = task.categoryId
-    ? data.categories.find((c: Category) => c.id === task.categoryId)
+    ? data.categories.find((c: Category) => c.id === task.categoryId?.toString())
     : undefined;
 
   const newTask: TaskWithCategory = {
@@ -119,7 +119,7 @@ export const updateTask = (
 ): TaskWithCategory | undefined => {
   const data = getData();
   const taskIndex = data.tasks.findIndex(
-    (task: TaskWithCategory) => task.id === id
+    (task: TaskWithCategory) => task.id === id.toString()
   );
 
   if (taskIndex === -1) return undefined;
@@ -131,7 +131,7 @@ export const updateTask = (
     taskUpdate.categoryId !== data.tasks[taskIndex].categoryId
   ) {
     category =
-      data.categories.find((c: Category) => c.id === taskUpdate.categoryId) ||
+      data.categories.find((c: Category) => c.id === taskUpdate.categoryId?.toString()) ||
       null;
   }
 
@@ -151,7 +151,7 @@ export const updateTask = (
 export const deleteTask = (id: number): boolean => {
   const data = getData();
   const taskIndex = data.tasks.findIndex(
-    (task: TaskWithCategory) => task.id === id
+    (task: TaskWithCategory) => task.id === id.toString()
   );
 
   if (taskIndex === -1) return false;
@@ -170,7 +170,7 @@ export const getCategories = (): Category[] => {
 
 export const getCategoryById = (id: number): Category | undefined => {
   const data = getData();
-  return data.categories.find((category: Category) => category.id === id);
+  return data.categories.find((category: Category) => category.id === id.toString());
 };
 
 export const createCategory = (category: Partial<Category>): Category => {
@@ -196,7 +196,7 @@ export const updateCategory = (
 ): Category | undefined => {
   const data = getData();
   const categoryIndex = data.categories.findIndex(
-    (category: Category) => category.id === id
+    (category: Category) => category.id === id.toString()
   );
 
   if (categoryIndex === -1) return undefined;
@@ -224,7 +224,7 @@ export const updateCategory = (
 export const deleteCategory = (id: number): boolean => {
   const data = getData();
   const categoryIndex = data.categories.findIndex(
-    (category: Category) => category.id === id
+    (category: Category) => category.id === id.toString()
   );
 
   if (categoryIndex === -1) return false;

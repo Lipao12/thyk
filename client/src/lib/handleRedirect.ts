@@ -41,10 +41,10 @@ export async function handleRedirect() {
     console.error("Firebase redirect error:", errorCode, errorMessage);
     
     // The email of the user's account used
-    const email = error.customData?.email;
+    //const email = error.customData?.email;
     
     // The AuthCredential type that was used
-    const credential = GoogleAuthProvider.credentialFromError(error);
+    //const credential = GoogleAuthProvider.credentialFromError(error);
     
     return null;
   }

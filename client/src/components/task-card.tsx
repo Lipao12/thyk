@@ -20,7 +20,7 @@ export default function TaskCard({ task, onEdit }: TaskCardProps) {
   const [isCompleting, setIsCompleting] = useState(false);
   const { toast } = useToast();
 
-  const { data: category, isLoading: isFetchingTask } = useQuery({
+  const { data: category } = useQuery({
     queryKey: ["/api/categories", task.categoryId],
     queryFn: () => apiRequest("GET", `/api/categories/${task.categoryId}`),
   });

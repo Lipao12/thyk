@@ -28,12 +28,7 @@ interface HeaderProps {
   } | null;
 }
 
-export default function Header({
-  toggleSidebar,
-  openTaskModal,
-  onLogout,
-  user,
-}: HeaderProps) {
+export default function Header({ toggleSidebar, onLogout, user }: HeaderProps) {
   const { i18n } = useTranslation("header");
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);

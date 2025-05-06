@@ -69,7 +69,7 @@ export default function TaskForm({ taskId, onClose }: TaskFormProps) {
     queryKey: ["/api/categories"],
   });
 
-  const { data: task, isLoading: isFetchingTask } = useQuery({
+  const { data: task } = useQuery({
     queryKey: ["/api/tasks", taskId],
     queryFn: () => apiRequest("GET", `/api/tasks/${taskId}`),
     enabled: isEditing, // Only fetch if editing

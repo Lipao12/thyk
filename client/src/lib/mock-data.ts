@@ -10,25 +10,25 @@ const nextWeek = addDays(today, 7);
 // Mock categories
 export const mockCategories: Category[] = [
   {
-    id: 1,
+    id: "1",
     name: "Work",
     color: "#FF625A", // Coral from Thyk palette
     userId: 1,
   },
   {
-    id: 2,
+    id: "2",
     name: "Personal",
     color: "#28B7D8", // Cyan from Thyk palette
     userId: 1,
   },
   {
-    id: 3,
+    id: "3",
     name: "Health",
     color: "#7B57FF", // Purple from Thyk palette
     userId: 1,
   },
   {
-    id: 4,
+    id: "4",
     name: "Learning",
     color: "#323B4E", // Navy from Thyk palette
     userId: 1,
@@ -38,7 +38,7 @@ export const mockCategories: Category[] = [
 // Mock tasks
 export const mockTasks: TaskWithCategory[] = [
   {
-    id: 1,
+    id: "1",
     title: "Complete Thyk interface design",
     description: "Update all components with new color scheme and typography",
     dueDate: today,
@@ -50,7 +50,7 @@ export const mockTasks: TaskWithCategory[] = [
     category: mockCategories[0]
   },
   {
-    id: 6,
+    id: "6",
     title: "Connect to Firebase",
     description: "Update all components with new color scheme and typography",
     dueDate: today,
@@ -62,7 +62,7 @@ export const mockTasks: TaskWithCategory[] = [
     category: mockCategories[0]
   },
   {
-    id: 7,
+    id: "7",
     title: "Connect to Firebase",
     description: "Update all components with new color scheme and typography",
     dueDate: today,
@@ -74,7 +74,7 @@ export const mockTasks: TaskWithCategory[] = [
     category: mockCategories[0]
   },
   {
-    id: 8,
+    id: "8",
     title: "Connect to Firebase",
     description: "Update all components with new color scheme and typography",
     dueDate: today,
@@ -86,7 +86,7 @@ export const mockTasks: TaskWithCategory[] = [
     category: mockCategories[0]
   },
   {
-    id: 2,
+    id: "2",
     title: "Workout session",
     description: "30 minute cardio and strength training",
     dueDate: tomorrow,
@@ -98,7 +98,7 @@ export const mockTasks: TaskWithCategory[] = [
     category: mockCategories[2]
   },
   {
-    id: 3,
+    id: "3",
     title: "Learn React hooks",
     description: "Complete tutorial on useContext and useMemo hooks",
     dueDate: nextWeek,
@@ -110,7 +110,7 @@ export const mockTasks: TaskWithCategory[] = [
     category: mockCategories[3]
   },
   {
-    id: 4,
+    id: "4",
     title: "Grocery shopping",
     description: "Buy fruits, vegetables, and meal ingredients",
     dueDate: today,
@@ -122,7 +122,7 @@ export const mockTasks: TaskWithCategory[] = [
     category: mockCategories[1]
   },
   {
-    id: 5,
+    id: "5",
     title: "Project planning",
     description: "Create roadmap for Q2 projects",
     dueDate: tomorrow,
