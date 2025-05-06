@@ -12,11 +12,12 @@ import {
   updateDoc,
   where
 } from "firebase/firestore";
+import { Task } from "../types/schema";
 import { db } from "./firebase";
 
 function safeStringify(obj: any) {
   const seen = new WeakSet();
-  return JSON.stringify(obj, (key, value) => {
+  return JSON.stringify(obj, (_, value) => {
     if (typeof value === "object" && value !== null) {
       if (seen.has(value)) return;
       seen.add(value);
@@ -74,6 +75,7 @@ export async function apiRequest(
         const docRef = doc(db, "tasks", id.toString());
         const docSnap = await getDoc(docRef);
         if (!docSnap.exists()) throw new Error(`Task with ID ${id} not found`);
+        //const taskData = docSnap.data() as Task;
         const task = { id: docSnap.id, ...docSnap.data() };
 
         if (task.userId !== userId) {

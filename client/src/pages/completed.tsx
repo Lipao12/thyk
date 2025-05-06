@@ -39,7 +39,7 @@ export default function Completed({ openTaskModal }: CompletedProps) {
   };
 
   // Filter completed tasks
-  const completedTasks = allTasks.filter((task: any) => task.completed);
+  const completedTasks = (allTasks as any[]).filter((task) => task.completed);
 
   return (
     <>

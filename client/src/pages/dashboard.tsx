@@ -58,7 +58,7 @@ export default function Dashboard({ openTaskModal }: DashboardProps) {
   };
 
   const taskGroups = groupTasksByDate();
-  const today = new Date();
+  //const today = new Date();
 
   return (
     <>
