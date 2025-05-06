@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import { Clock, Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -10,7 +11,7 @@ import { Checkbox } from "./ui/checkbox";
 
 interface TaskCardProps {
   task: TaskWithCategory;
-  onEdit: (taskId: string) => void;
+  onEdit: (taskId: any) => void;
 }
 
 export default function TaskCard({ task, onEdit }: TaskCardProps) {
@@ -18,6 +19,13 @@ export default function TaskCard({ task, onEdit }: TaskCardProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isCompleting, setIsCompleting] = useState(false);
   const { toast } = useToast();
+
+  const { data: category, isLoading: isFetchingTask } = useQuery({
+    queryKey: ["/api/categories", task.categoryId],
+    queryFn: () => apiRequest("GET", `/api/categories/${task.categoryId}`),
+  });
+
+  console.log("Categoria: ", category);
 
   const handleTaskDelete = async () => {
     if (isDeleting) return;
@@ -104,27 +112,29 @@ export default function TaskCard({ task, onEdit }: TaskCardProps) {
   };
 
   const getCategoryBadgeStyle = () => {
-    if (!task.category)
+    if (!task.categoryId || !category)
       return {
         bg: "bg-slate-100 dark:bg-slate-800",
         text: "text-slate-500 dark:text-slate-300",
       };
 
     // If the category has a custom color, use it
-    if (task.category.color) {
-      // Create a lighter background for the badge with opacity
-      const bgColor = task.category.color.startsWith("#")
-        ? `bg-[${task.category.color}]/10 dark:bg-[${task.category.color}]/20`
-        : "bg-slate-100 dark:bg-slate-800";
-
+    if (category.color) {
+      // Aplica a cor com opacidade diretamente via style
       return {
-        bg: bgColor,
-        text: `text-[${task.category.color}] dark:text-[${task.category.color}]`,
+        bgClass: "", // Não usa classe Tailwind para fundo
+        textClass: "", // Não usa classe Tailwind para texto
+        bgStyle: {
+          backgroundColor: `${category.color}1A`, // 10% opacidade (hex: 1A ≈ 10%)
+        },
+        textStyle: {
+          color: category.color,
+        },
       };
     }
 
     // Default category styles if no color is specified
-    switch (task.category.name.toLowerCase()) {
+    switch (category.name.toLowerCase()) {
       case "work":
         return {
           bg: "bg-accent/10 dark:bg-accent/20",
@@ -237,11 +247,15 @@ export default function TaskCard({ task, onEdit }: TaskCardProps) {
           )}
 
           <div className="mt-3 flex flex-wrap items-center gap-2">
-            {task.category && (
+            {category && (
               <div
-                className={`px-2 py-1 ${categoryStyle.bg} ${categoryStyle.text}  text-xs rounded-md font-medium`}
+                style={{
+                  backgroundColor: categoryStyle.bgStyle?.backgroundColor,
+                  color: categoryStyle.textStyle?.color,
+                }}
+                className={`px-2 py-1 text-xs rounded-md font-medium`}
               >
-                {task.category.name}
+                {category.name}
               </div>
             )}
 

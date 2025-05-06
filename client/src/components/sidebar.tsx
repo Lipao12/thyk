@@ -242,7 +242,7 @@ export default function Sidebar({
                 categories.map((category: Category) => (
                   <li
                     key={category.id}
-                    className="flex items-center py-2 px-4 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-auto"
+                    className="flex items-center py-2 px-4 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-auto gap-1"
                   >
                     <ColorBadge color={category.color} className="mr-3" />
                     <span className="text-sm">{category.name}</span>
@@ -259,7 +259,7 @@ export default function Sidebar({
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-6 w-6 text-slate-500 hover:text-accent dark:text-slate-400 dark:hover:text-accent"
+                          className="h-6 w-6 text-slate-500 hover:text-accent dark:text-slate-400 dark:hover:text-primary"
                           onClick={() => {
                             handleTaskDelete(category);
                           }}

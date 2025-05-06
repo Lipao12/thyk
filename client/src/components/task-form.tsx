@@ -9,6 +9,7 @@ import { useAuth } from "../context/auth-context";
 import { useToast } from "../hooks/use-toast";
 import { apiRequest, queryClient } from "../lib/queryClient";
 import { cn } from "../lib/utils";
+import { Category } from "../types/schema";
 import { Button } from "./ui/button";
 import { Calendar } from "./ui/calendar";
 import {
@@ -54,7 +55,7 @@ const formSchema = z.object({
     .optional()
     .nullable(),
   priority: z.enum(["low", "medium", "high"]).default("medium"),
-  categoryId: z.number().optional().nullable(),
+  categoryId: z.string().optional().nullable(),
   userId: z.string(), // Hardcoded for demo
 });
 
@@ -172,6 +173,8 @@ export default function TaskForm({ taskId, onClose }: TaskFormProps) {
     );
   }
 
+  console.log(categories);
+
   return (
     <DialogContent className="max-w-[360px] md:max-w-[425px]">
       <DialogHeader>
@@ -269,11 +272,17 @@ export default function TaskForm({ taskId, onClose }: TaskFormProps) {
                   onValueChange={(value) =>
                     field.onChange(value === "null" ? null : Number(value))
                   }
-                  value={field.value?.toString() || ""}*/
+                  value={field.value?.toString() || ""}
                   onValueChange={(value) =>
                     field.onChange(value === "null" ? 0 : parseInt(value))
                   }
-                  value={field.value?.toString() || "null"}
+                  value={field.value?.toString() || "null"}*/
+                  onValueChange={(value) =>
+                    field.onChange(value === "null" ? null : value)
+                  }
+                  value={
+                    field.value === null ? "null" : field.value?.toString()
+                  }
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -281,10 +290,8 @@ export default function TaskForm({ taskId, onClose }: TaskFormProps) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value={field.value?.toString() || "null"}>
-                      None
-                    </SelectItem>
-                    {(categories as any[]).map((category: any) => (
+                    <SelectItem value="null">None</SelectItem>
+                    {(categories as Category[]).map((category: Category) => (
                       <SelectItem
                         key={category.id}
                         value={category.id.toString()}
