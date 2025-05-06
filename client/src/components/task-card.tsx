@@ -10,7 +10,7 @@ import { Checkbox } from "./ui/checkbox";
 
 interface TaskCardProps {
   task: TaskWithCategory;
-  onEdit: (taskId: number) => void;
+  onEdit: (taskId: string) => void;
 }
 
 export default function TaskCard({ task, onEdit }: TaskCardProps) {

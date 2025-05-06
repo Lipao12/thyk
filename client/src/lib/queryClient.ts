@@ -165,16 +165,22 @@ export async function apiRequest(
         //return localStorageService.getCategories();
       }
       // GET /api/categories/:id
-      else if (method === 'GET' && id) {
+      else if (method === "GET" && id) {
         const docRef = doc(db, "categories", id.toString());
         const docSnap = await getDoc(docRef);
-        if (!docSnap.exists()) throw new Error(`Category with ID ${id} not found`);
-        const category = { id: docSnap.id, ...docSnap.data() };
-
-        if (category.userId !== userId) {
-          throw new Error("Unauthorized access to task");
+      
+        if (!docSnap.exists()) {
+          throw new Error(`Categoria com ID '${id}' não encontrada.`);
         }
-        return { id: docSnap.id, ...docSnap.data() };
+      
+        const categoryData = docSnap.data();
+        const category = { id: docSnap.id, ...categoryData };
+      
+        if (category.userId !== userId) {
+          throw new Error("Acesso não autorizado a esta categoria.");
+        }
+      
+        return category;
 
         //const category = localStorageService.getCategoryById(id);
         //if (!category) throw new Error(`Category with ID ${id} not found`);

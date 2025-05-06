@@ -17,7 +17,7 @@ export const insertUserSchema = createInsertSchema(users).pick({
 
 // Categories schema
 export const categories = pgTable("categories", {
-  id: serial("id").primaryKey(),
+  id: text("id").primaryKey(),
   name: text("name").notNull(),
   color: text("color").notNull(), // Color code as string (hex or HSL)
   userId: integer("user_id").references(() => users.id).notNull(),
@@ -31,7 +31,7 @@ export const insertCategorySchema = createInsertSchema(categories).pick({
 
 // Tasks schema
 export const tasks = pgTable("tasks", {
-  id: serial("id").primaryKey(),
+  id: text("id").primaryKey(),
   title: text("title").notNull(),
   description: text("description"),
   dueDate: timestamp("due_date"),

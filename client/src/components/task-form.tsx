@@ -38,7 +38,7 @@ import {
 import { Textarea } from "./ui/text-area";
 
 interface TaskFormProps {
-  taskId: number | null;
+  taskId: string | null;
   onClose: () => void;
 }
 
@@ -114,6 +114,7 @@ export default function TaskForm({ taskId, onClose }: TaskFormProps) {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      setIsTaskLoading(true);
       // Create a clean data object with only the fields we need
       const cleanValues: Record<string, any> = {
         title: values.title,
@@ -156,6 +157,8 @@ export default function TaskForm({ taskId, onClose }: TaskFormProps) {
           error instanceof Error ? error.message : "An error occurred",
         variant: "destructive",
       });
+    } finally {
+      setIsTaskLoading(false);
     }
   };
 
@@ -260,13 +263,17 @@ export default function TaskForm({ taskId, onClose }: TaskFormProps) {
               <FormItem>
                 <FormLabel>Category</FormLabel>
                 <Select
-                  //onValueChange={(value) =>
+                  /*//onValueChange={(value) =>
                   //  field.onChange(value ? parseInt(value) : null)
                   //}
                   onValueChange={(value) =>
                     field.onChange(value === "null" ? null : Number(value))
                   }
-                  value={field.value?.toString() || ""}
+                  value={field.value?.toString() || ""}*/
+                  onValueChange={(value) =>
+                    field.onChange(value === "null" ? 0 : parseInt(value))
+                  }
+                  value={field.value?.toString() || "null"}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -274,14 +281,7 @@ export default function TaskForm({ taskId, onClose }: TaskFormProps) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem
-                      /*onValueChange={(value) =>
-                        field.onChange(
-                          value === "null" ? null : parseInt(value)
-                        )
-                      }*/
-                      value={field.value?.toString() || "null"}
-                    >
+                    <SelectItem value={field.value?.toString() || "null"}>
                       None
                     </SelectItem>
                     {(categories as any[]).map((category: any) => (
@@ -346,11 +346,48 @@ export default function TaskForm({ taskId, onClose }: TaskFormProps) {
           />
 
           <DialogFooter className="mt-6 flex flex-row justify-end space-x-3">
-            <Button type="button" variant="outline" onClick={onClose}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onClose}
+              disabled={isTaskLoading}
+            >
               Cancel
             </Button>
-            <Button type="submit" className="bg-primary hover:bg-opacity-90">
-              {isEditing ? "Update Task" : "Save Task"}
+            <Button
+              type="submit"
+              className="bg-primary hover:bg-opacity-90 flex items-center justify-center gap-2"
+              disabled={isTaskLoading}
+            >
+              {isTaskLoading && (
+                <svg
+                  className="w-4 h-4 animate-spin text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  ></path>
+                </svg>
+              )}
+
+              {isTaskLoading
+                ? isEditing
+                  ? "Atualizando..."
+                  : "Salvando..."
+                : isEditing
+                ? "Atualizar Tarefa"
+                : "Salvar Tarefa"}
             </Button>
           </DialogFooter>
         </form>

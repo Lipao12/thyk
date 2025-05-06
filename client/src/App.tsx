@@ -55,7 +55,7 @@ function AppRouter({
   openTaskModal,
   isAuthenticated,
 }: {
-  openTaskModal: (taskId?: number) => void;
+  openTaskModal: (taskId?: string) => void;
   isAuthenticated: boolean;
 }) {
   return (
@@ -92,7 +92,7 @@ function AppRouter({
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
-  const [editingTask, setEditingTask] = useState<number | null>(null);
+  const [editingTask, setEditingTask] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [location] = useLocation();
   const { user, userData, loading } = useAuth();
@@ -115,7 +115,7 @@ function App() {
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
-  const openTaskModal = (taskId?: number) => {
+  const openTaskModal = (taskId?: string) => {
     setEditingTask(taskId ?? null);
     setIsTaskModalOpen(true);
   };

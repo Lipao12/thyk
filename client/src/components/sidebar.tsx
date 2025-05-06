@@ -32,7 +32,7 @@ import { ScrollArea } from "./ui/scroll-area";
 interface SidebarProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  openTaskModal: (task?: number) => void;
+  openTaskModal: (task?: string) => void;
 }
 
 export default function Sidebar({

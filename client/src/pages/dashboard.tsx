@@ -9,7 +9,7 @@ import { formatDate } from "../lib/utils";
 import { TimeFrame } from "../types/schema";
 
 interface DashboardProps {
-  openTaskModal?: (taskId?: number) => void;
+  openTaskModal?: (taskId?: string) => void;
 }
 
 export default function Dashboard({ openTaskModal }: DashboardProps) {
@@ -36,7 +36,7 @@ export default function Dashboard({ openTaskModal }: DashboardProps) {
     }
   }, [error, toast]);
 
-  const handleEditTask = (taskId: number) => {
+  const handleEditTask = (taskId: string) => {
     if (openTaskModal) {
       openTaskModal(taskId);
     }

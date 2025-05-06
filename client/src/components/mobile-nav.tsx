@@ -4,7 +4,7 @@ import { Link, useLocation } from "wouter";
 import { Button } from "./ui/button";
 
 interface MobileNavProps {
-  openTaskModal: (taskId?: number) => void;
+  openTaskModal: (taskId?: string) => void;
 }
 
 export default function MobileNav({ openTaskModal }: MobileNavProps) {
